@@ -201,3 +201,44 @@ graph TD
     ```
 
 ## 📂 项目结构
+
+```
+RecycleRover/
+├── README.md                    # 项目主说明文档
+├── .gitignore                   # Git忽略文件配置
+└── waste_detection/             # 废品图像识别模块 🎯
+    ├── README.md                # 模块详细说明
+    ├── requirements.txt         # Python依赖包
+    ├── dataset/                 # 数据集管理
+    │   ├── images/             # 图像数据(train/val/test)
+    │   ├── labels/             # YOLO格式标注文件
+    │   └── data_utils.py       # 数据集处理工具
+    ├── config/                  # 配置文件
+    │   ├── waste_data.yaml     # 数据集配置
+    │   ├── model_config.yaml   # 模型配置
+    │   └── training_config.yaml # 训练参数配置
+    ├── models/                  # 模型定义和权重
+    ├── scripts/                 # 训练和推理脚本
+    │   ├── train.py            # 模型训练脚本
+    │   ├── evaluate.py         # 模型评估脚本
+    │   ├── inference.py        # 实时推理脚本
+    │   └── export.py           # 模型导出脚本
+    ├── utils/                   # 工具函数
+    │   ├── __init__.py         # 常量和类别定义
+    │   ├── visualization.py    # 结果可视化
+    │   ├── metrics.py          # 性能指标计算
+    │   └── deployment.py       # 部署工具
+    └── deployment/              # 部署配置
+        ├── jetson_setup.md     # Jetson TX2安装指南
+        ├── tensorrt_config.py  # TensorRT优化配置
+        └── inference_service.py # 部署服务脚本
+```
+
+### 🎯 废品检测模块特性
+
+- **支持5类废品识别**: 塑料瓶、纸箱、金属罐、玻璃瓶、废纸
+- **高精度检测**: mAP@0.5 目标 >95%
+- **轻量化设计**: YOLOv5s模型 <15MB
+- **边缘部署优化**: 针对Jetson TX2优化，支持TensorRT加速
+- **实时处理**: 目标 >30 FPS
+- **完整工具链**: 从数据准备到模型部署的完整解决方案
