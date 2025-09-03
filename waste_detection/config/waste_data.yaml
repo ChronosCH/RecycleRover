@@ -1,0 +1,30 @@
+# Dataset configuration for waste detection
+# YOLOv5 format
+
+# Dataset paths (relative to this file)
+path: ../dataset  # dataset root dir
+train: images/train  # train images (relative to 'path')
+val: images/val      # val images (relative to 'path')
+test: images/test    # test images (optional, relative to 'path')
+
+# Classes
+nc: 5  # number of classes
+names: ['plastic_bottle', 'paper_box', 'metal_can', 'glass_bottle', 'paper']
+
+# Class descriptions for reference
+class_descriptions:
+  plastic_bottle: "Plastic bottles of all sizes and colors"
+  paper_box: "Cardboard boxes, paper packaging"
+  metal_can: "Aluminum cans, steel cans, metal containers"
+  glass_bottle: "Glass bottles and jars"
+  paper: "Waste paper, newspapers, documents"
+
+# Data collection guidelines
+collection_guidelines:
+  diversity:
+    - "Different lighting conditions (bright, dim, shadow)"
+    - "Various backgrounds (clean floor, messy area, outdoor)"
+    - "Different object states (clean, dirty, deformed, partial)"
+    - "Multiple angles (top-down, side view, diagonal)"
+  target_count_per_class: 1500
+  annotation_format: "YOLO (normalized xywh)"

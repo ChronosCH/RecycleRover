@@ -1,0 +1,73 @@
+# Training configuration for waste detection model
+# Optimized for YOLOv5s deployment on Jetson TX2
+
+# Model settings
+model:
+  name: "yolov5s"
+  pretrained_weights: "yolov5s.pt"
+  input_size: 640
+  confidence_threshold: 0.25
+  iou_threshold: 0.45
+
+# Training hyperparameters
+training:
+  epochs: 300
+  batch_size: 16
+  learning_rate: 0.01
+  momentum: 0.937
+  weight_decay: 0.0005
+  warmup_epochs: 3
+  warmup_momentum: 0.8
+  warmup_bias_lr: 0.1
+
+# Data augmentation
+augmentation:
+  hsv_h: 0.015      # image HSV-Hue augmentation (fraction)
+  hsv_s: 0.7        # image HSV-Saturation augmentation (fraction)
+  hsv_v: 0.4        # image HSV-Value augmentation (fraction)
+  degrees: 0.0      # image rotation (+/- deg)
+  translate: 0.1    # image translation (+/- fraction)
+  scale: 0.5        # image scale (+/- gain)
+  shear: 0.0        # image shear (+/- deg)
+  perspective: 0.0  # image perspective (+/- fraction), range 0-0.001
+  flipud: 0.0       # image flip up-down (probability)
+  fliplr: 0.5       # image flip left-right (probability)
+  mosaic: 1.0       # image mosaic (probability)
+  mixup: 0.0        # image mixup (probability)
+  copy_paste: 0.0   # segment copy-paste (probability)
+
+# Loss function weights
+loss:
+  cls: 0.5          # classification loss weight
+  box: 0.05         # box regression loss weight
+  obj: 1.0          # objectness loss weight
+  cls_pw: 1.0       # classification positive weight
+  obj_pw: 1.0       # objectness positive weight
+  iou_t: 0.20       # IoU training threshold
+  anchor_t: 4.0     # anchor-multiple threshold
+  fl_gamma: 0.0     # focal loss gamma (efficientDet default gamma=1.5)
+
+# Optimization
+optimizer:
+  name: "SGD"       # optimizer (SGD, Adam, AdamW)
+  lr0: 0.01         # initial learning rate
+  lrf: 0.1          # final OneCycleLR learning rate (lr0 * lrf)
+
+# Early stopping
+early_stopping:
+  patience: 100     # epochs to wait for no improvement for early stopping
+  min_delta: 0.001  # minimum change to qualify as an improvement
+
+# Performance targets
+targets:
+  map_50: 0.95      # target mAP@0.5
+  inference_speed: 30  # target FPS on Jetson TX2
+  model_size_mb: 15    # target model size in MB
+
+# Hardware settings
+hardware:
+  device: "0"       # CUDA device, i.e. 0 or 0,1,2,3 or cpu
+  workers: 8        # max dataloader workers
+  project: "runs/train"  # save to project/name
+  name: "waste_detection"  # save to project/name
+  exist_ok: false   # existing project/name ok, do not increment
