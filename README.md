@@ -55,8 +55,95 @@
 
 ## 🏗️ 系统架构
 
-![系统架构图](docs/images/system_architecture.png)
-*<p align="center">（请在此处替换为您的系统架构图）</p>*
+```mermaid
+%% RecycleRover System Architecture Diagram
+%% Author: Gemini Assistant
+%% Date: 2025-09-03
+
+graph TD
+    %% Define Styles for different components for a better look
+    classDef userStyle fill:#e3f2fd,stroke:#333,stroke-width:2px,color:#0d47a1
+    classDef cloudStyle fill:#e8f5e9,stroke:#333,stroke-width:2px,color:#1b5e20
+    classDef vehicleStyle fill:#fff3e0,stroke:#333,stroke-width:2px,color:#e65100
+    classDef dbStyle fill:#fbe9e7,stroke:#333,stroke-width:2px,color:#bf360c
+    classDef commStyle fill:#e1f5fe,stroke:#333,stroke-width:2px,color:#01579b
+
+    %% 1. User Client Subgraph
+    subgraph 用户端 (Client)
+        UserApp["📱 fa:fa-mobile-alt 用户App (Android/iOS)"]
+    end
+
+    %% 2. Cloud Platform Subgraph
+    subgraph 云端管理平台 (Cloud Platform)
+        direction LR
+        
+        ApiGateway["fa:fa-server API网关 (Nginx)"]
+        
+        subgraph "核心微服务 (Spring Cloud)"
+            UserService["fa:fa-users 用户服务"]
+            OrderService["fa:fa-file-alt 订单服务"]
+            DispatchService["fa:fa-route 智能调度服务"]
+            DataService["fa:fa-chart-bar 数据分析服务"]
+        end
+
+        subgraph "数据与通信层"
+            MySQL["fa:fa-database MySQL<br>(用户/订单数据)"]
+            Redis["fa:fa-bolt Redis<br>(缓存/会话)"]
+            MQTTBroker["fa:fa-rss MQTT代理<br>(与车辆实时通信)"]
+        end
+        
+        %% Cloud internal connections
+        ApiGateway --> UserService
+        ApiGateway --> OrderService
+        OrderService --> DispatchService
+        DispatchService --> MQTTBroker
+        UserService & OrderService & DataService --- MySQL
+        UserService & DispatchService --- Redis
+    end
+
+    %% 3. Unmanned Vehicle Subgraph
+    subgraph 无人回收车终端 (Rover)
+        
+        MQTTClient["fa:fa-satellite-dish MQTT客户端"]
+        
+        subgraph "车载计算单元 (Jetson TX2)"
+            ROS["fa:fa-cogs ROS 系统"]
+            Perception["fa:fa-eye 视觉感知模块<br>(YOLOv5)"]
+            Navigation["fa:fa-map-signs 自主导航模块<br>(SLAM & A*)"]
+            Control["fa:fa-gamepad 底盘控制模块"]
+        end
+
+        Hardware["fa:fa-microchip 传感器与执行器<br>(激光雷达, 摄像头, 电机)"]
+
+        %% Vehicle internal connections
+        MQTTClient --> ROS
+        ROS --> Perception
+        ROS --> Navigation
+        ROS --> Control
+        Control --> Hardware
+        Hardware --> ROS
+    end
+
+    %% Define Main Data Flow and Connections
+    UserApp -- "1. HTTPS 请求<br>(下单, 查询状态)" --> ApiGateway
+    ApiGateway -- "6. 推送通知<br>(状态更新)" --> UserApp
+    
+    DispatchService -- "2. MQTT<br>(调度指令, 路径规划)" --> MQTTBroker
+    MQTTBroker -.-> MQTTClient
+
+    MQTTClient -- "3. MQTT<br>(心跳, 位置, 状态上报)" -.-> MQTTBroker
+    MQTTBroker --> DispatchService
+    MQTTBroker --> DataService
+
+
+    %% Apply Styles to nodes
+    class UserApp userStyle
+    class ApiGateway,UserService,OrderService,DispatchService,DataService cloudStyle
+    class MySQL,Redis dbStyle
+    class MQTTBroker commStyle
+    class MQTTClient,ROS,Perception,Navigation,Control,Hardware vehicleStyle
+```
+
 
 系统采用“端-云-车”三层架构：
 1.  **用户端 (Client)**：负责用户交互与服务请求。
