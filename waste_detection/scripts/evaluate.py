@@ -1,6 +1,6 @@
 """
-Model evaluation script for waste detection
-Provides comprehensive evaluation metrics and analysis
+废品检测模型评估脚本
+提供综合评估指标和分析
 """
 
 import os
@@ -18,22 +18,22 @@ try:
     ULTRALYTICS_AVAILABLE = True
 except ImportError:
     ULTRALYTICS_AVAILABLE = False
-    print("Warning: ultralytics not available. Please install: pip install ultralytics")
+    print("警告: ultralytics不可用。请安装: pip install ultralytics")
 
 from utils import WASTE_CLASS_NAMES
 from utils.visualization import WasteDetectionVisualizer
 
 
 class WasteDetectionEvaluator:
-    """Comprehensive evaluation for waste detection models"""
+    """废品检测模型的综合评估"""
     
     def __init__(self, model_path: str, data_config: str):
         """
-        Initialize evaluator
+        初始化评估器
         
-        Args:
-            model_path: Path to trained model weights
-            data_config: Path to dataset configuration file
+        参数:
+            model_path: 训练模型权重的路径
+            data_config: 数据集配置文件路径
         """
         self.model_path = model_path
         self.data_config = data_config
@@ -43,9 +43,9 @@ class WasteDetectionEvaluator:
         self.load_model()
     
     def load_model(self):
-        """Load trained model"""
+        """加载训练好的模型"""
         if not ULTRALYTICS_AVAILABLE:
-            raise ImportError("ultralytics package is required for evaluation")
+            raise ImportError("评估需要ultralytics包")
         
         if not os.path.exists(self.model_path):
             raise FileNotFoundError(f"Model weights not found: {self.model_path}")

@@ -1,98 +1,98 @@
-# Waste Detection Module
+# 废品检测模块
 
-This module implements a YOLOv5-based computer vision system for detecting and classifying recyclable waste materials in the RecycleRover project.
+本模块为RecycleRover项目实现了基于YOLOv5的计算机视觉系统，用于检测和分类可回收废品材料。
 
-## Overview
+## 概述
 
-The waste detection system can identify 5 categories of recyclable materials:
-1. `plastic_bottle` - Plastic bottles
-2. `paper_box` - Paper boxes/cardboard
-3. `metal_can` - Metal cans (aluminum/steel)
-4. `glass_bottle` - Glass bottles
-5. `paper` - Waste paper/newspapers
+废品检测系统可以识别5类可回收材料：
+1. `plastic_bottle` - 塑料瓶
+2. `paper_box` - 纸盒/纸板
+3. `metal_can` - 金属罐（铝/钢）
+4. `glass_bottle` - 玻璃瓶
+5. `paper` - 废纸/报纸
 
-## Target Performance
-- **Accuracy**: >95% detection accuracy
-- **Model**: YOLOv5s (lightweight, <15MB)
-- **Deployment**: Optimized for NVIDIA Jetson TX2
+## 目标性能
+- **准确率**: >95% 检测准确率
+- **模型**: YOLOv5s（轻量化，<15MB）
+- **部署**: 针对NVIDIA Jetson TX2优化
 
-## Directory Structure
+## 目录结构
 
 ```
 waste_detection/
-├── README.md                 # This file
-├── requirements.txt          # Python dependencies
-├── dataset/                  # Dataset management
-│   ├── images/              # Image data
-│   │   ├── train/           # Training images (80%)
-│   │   ├── val/             # Validation images (10%)
-│   │   └── test/            # Test images (10%)
-│   ├── labels/              # YOLO format annotations
-│   │   ├── train/           # Training labels
-│   │   ├── val/             # Validation labels
-│   │   └── test/            # Test labels
-│   └── data_utils.py        # Dataset utilities
-├── config/                   # Configuration files
-│   ├── waste_data.yaml      # Dataset configuration
-│   ├── model_config.yaml    # Model configuration
-│   └── training_config.yaml # Training parameters
-├── models/                   # Model definitions and weights
-│   └── yolov5s_waste.yaml   # Custom YOLOv5s configuration
-├── scripts/                  # Training and inference scripts
-│   ├── train.py             # Training script
-│   ├── evaluate.py          # Evaluation script
-│   ├── inference.py         # Real-time inference
-│   └── export.py            # Model export (ONNX/TensorRT)
-├── utils/                    # Utility functions
+├── README.md                 # 本文件
+├── requirements.txt          # Python依赖包
+├── dataset/                  # 数据集管理
+│   ├── images/              # 图像数据
+│   │   ├── train/           # 训练图像（80%）
+│   │   ├── val/             # 验证图像（10%）
+│   │   └── test/            # 测试图像（10%）
+│   ├── labels/              # YOLO格式标注文件
+│   │   ├── train/           # 训练标签
+│   │   ├── val/             # 验证标签
+│   │   └── test/            # 测试标签
+│   └── data_utils.py        # 数据集工具
+├── config/                   # 配置文件
+│   ├── waste_data.yaml      # 数据集配置
+│   ├── model_config.yaml    # 模型配置
+│   └── training_config.yaml # 训练参数配置
+├── models/                   # 模型定义和权重
+│   └── yolov5s_waste.yaml   # 自定义YOLOv5s配置
+├── scripts/                  # 训练和推理脚本
+│   ├── train.py             # 训练脚本
+│   ├── evaluate.py          # 评估脚本
+│   ├── inference.py         # 实时推理
+│   └── export.py            # 模型导出（ONNX/TensorRT）
+├── utils/                    # 工具函数
 │   ├── __init__.py
-│   ├── visualization.py     # Result visualization
-│   ├── metrics.py           # Performance metrics
-│   └── deployment.py        # Deployment utilities
-└── deployment/               # Deployment configurations
-    ├── jetson_setup.md      # Jetson TX2 setup guide
-    ├── tensorrt_config.py   # TensorRT optimization
-    └── inference_service.py # Deployment service
+│   ├── visualization.py     # 结果可视化
+│   ├── metrics.py           # 性能指标计算
+│   └── deployment.py        # 部署工具
+└── deployment/               # 部署配置
+    ├── jetson_setup.md      # Jetson TX2安装指南
+    ├── tensorrt_config.py   # TensorRT优化配置
+    └── inference_service.py # 部署服务脚本
 ```
 
-## Quick Start
+## 快速开始
 
-1. **Environment Setup**
+1. **环境设置**
    ```bash
    cd waste_detection
    pip install -r requirements.txt
    ```
 
-2. **Dataset Preparation**
+2. **数据集准备**
    ```bash
    python dataset/data_utils.py --prepare
    ```
 
-3. **Training**
+3. **训练**
    ```bash
    python scripts/train.py --config config/training_config.yaml
    ```
 
-4. **Evaluation**
+4. **评估**
    ```bash
    python scripts/evaluate.py --weights models/best.pt
    ```
 
-5. **Inference**
+5. **推理**
    ```bash
-   python scripts/inference.py --source 0  # webcam
+   python scripts/inference.py --source 0  # 摄像头
    python scripts/inference.py --source path/to/image.jpg
    ```
 
-## Integration with RecycleRover
+## 与RecycleRover的集成
 
-The waste detection module integrates with the main RecycleRover system through:
-- **ROS Interface**: Publishes detection results to ROS topics
-- **MQTT Communication**: Sends detection data to cloud platform
-- **Real-time Processing**: Processes camera feed from rover's vision system
+废品检测模块通过以下方式与主RecycleRover系统集成：
+- **ROS接口**: 将检测结果发布到ROS话题
+- **MQTT通信**: 向云端平台发送检测数据
+- **实时处理**: 处理无人车视觉系统的摄像头画面
 
-## Performance Targets
+## 性能目标
 
-- **Inference Speed**: >30 FPS on Jetson TX2
-- **Model Size**: <15MB for deployment
-- **Accuracy**: >95% mAP@0.5
-- **Power Efficiency**: Optimized for mobile deployment
+- **推理速度**: 在Jetson TX2上>30 FPS
+- **模型大小**: <15MB用于部署
+- **准确率**: >95% mAP@0.5
+- **功耗效率**: 针对移动部署优化

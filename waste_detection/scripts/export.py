@@ -1,6 +1,6 @@
 """
-Model export utilities for deployment
-Supports ONNX, TensorRT, and other deployment formats
+部署模型导出工具
+支持ONNX、TensorRT和其他部署格式
 """
 
 import os
@@ -15,29 +15,29 @@ try:
     ULTRALYTICS_AVAILABLE = True
 except ImportError:
     ULTRALYTICS_AVAILABLE = False
-    print("Warning: ultralytics not available. Please install: pip install ultralytics")
+    print("警告: ultralytics不可用。请安装: pip install ultralytics")
 
 try:
     import onnx
     ONNX_AVAILABLE = True
 except ImportError:
     ONNX_AVAILABLE = False
-    print("Warning: onnx not available for ONNX export")
+    print("警告: onnx不可用，无法导出ONNX格式")
 
 try:
     import tensorrt as trt
     TENSORRT_AVAILABLE = True
 except ImportError:
     TENSORRT_AVAILABLE = False
-    print("Warning: tensorrt not available for TensorRT export")
+    print("警告: tensorrt不可用，无法导出TensorRT格式")
 
 
 class ModelExporter:
-    """Handles model export for various deployment formats"""
+    """处理各种部署格式的模型导出"""
     
     def __init__(self, model_path: str):
         """
-        Initialize model exporter
+        初始化模型导出器
         
         Args:
             model_path: Path to trained PyTorch model

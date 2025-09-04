@@ -1,6 +1,6 @@
 """
-Real-time inference script for waste detection
-Supports webcam, image files, and video files
+废品检测实时推理脚本
+支持摄像头、图像文件和视频文件
 """
 
 import os
@@ -17,24 +17,24 @@ try:
     ULTRALYTICS_AVAILABLE = True
 except ImportError:
     ULTRALYTICS_AVAILABLE = False
-    print("Warning: ultralytics not available. Please install: pip install ultralytics")
+    print("警告: ultralytics不可用。请安装: pip install ultralytics")
 
 from utils import WASTE_CLASS_NAMES, CLASS_COLORS, DEFAULT_CONF_THRESHOLD, DEFAULT_IOU_THRESHOLD
 from utils.visualization import WasteDetectionVisualizer
 
 
 class WasteDetectionInference:
-    """Real-time waste detection inference engine"""
+    """实时废品检测推理引擎"""
     
     def __init__(self, model_path: str, conf_threshold: float = DEFAULT_CONF_THRESHOLD,
                  iou_threshold: float = DEFAULT_IOU_THRESHOLD):
         """
-        Initialize inference engine
+        初始化推理引擎
         
-        Args:
-            model_path: Path to trained model weights
-            conf_threshold: Confidence threshold for detections
-            iou_threshold: IoU threshold for NMS
+        参数:
+            model_path: 训练模型权重的路径
+            conf_threshold: 检测的置信度阈值
+            iou_threshold: NMS的IoU阈值
         """
         self.model_path = model_path
         self.conf_threshold = conf_threshold
@@ -45,9 +45,9 @@ class WasteDetectionInference:
         self.load_model()
     
     def load_model(self):
-        """Load the trained YOLO model"""
+        """加载训练好的YOLO模型"""
         if not ULTRALYTICS_AVAILABLE:
-            raise ImportError("ultralytics package is required for inference")
+            raise ImportError("推理需要ultralytics包")
         
         if not os.path.exists(self.model_path):
             raise FileNotFoundError(f"Model weights not found: {self.model_path}")
