@@ -1,32 +1,32 @@
-# Jetson TX2 Setup Guide for Waste Detection
+# Jetson TX2 废品检测系统安装指南
 
-This guide provides step-by-step instructions for setting up the waste detection system on NVIDIA Jetson TX2.
+本指南提供在NVIDIA Jetson TX2上设置废品检测系统的详细步骤。
 
-## Prerequisites
+## 前提条件
 
-- NVIDIA Jetson TX2 Developer Kit
-- MicroSD card (64GB+ recommended)
-- Host computer for flashing
-- Internet connection
+- NVIDIA Jetson TX2开发套件
+- MicroSD卡（推荐64GB+）
+- 用于刷机的主机电脑
+- 网络连接
 
-## 1. System Setup
+## 1. 系统设置
 
-### 1.1 Flash JetPack
+### 1.1 刷入JetPack
 
-1. **Download NVIDIA SDK Manager**
-   - Go to https://developer.nvidia.com/nvidia-sdk-manager
-   - Download and install SDK Manager on host computer
+1. **下载NVIDIA SDK Manager**
+   - 访问 https://developer.nvidia.com/nvidia-sdk-manager
+   - 在主机电脑上下载并安装SDK Manager
 
-2. **Flash JetPack 4.6.1** (recommended for compatibility)
+2. **刷入JetPack 4.6.1**（推荐用于兼容性）
    ```bash
-   # Put Jetson TX2 in recovery mode
-   # Connect to host via USB cable
-   # Run SDK Manager and follow instructions
+   # 将Jetson TX2设置为恢复模式
+   # 通过USB线缆连接到主机
+   # 运行SDK Manager并按照说明操作
    ```
 
-3. **Complete initial setup** on Jetson TX2
+3. **在Jetson TX2上完成初始设置**
 
-### 1.2 System Configuration
+### 1.2 系统配置
 
 1. **Increase swap space** (important for compilation)
    ```bash

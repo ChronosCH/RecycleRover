@@ -1,6 +1,6 @@
 """
-Dataset utilities for waste detection
-Handles dataset preparation, annotation, and management
+废品检测数据集工具
+处理数据集准备、标注和管理
 """
 
 import os
@@ -15,35 +15,35 @@ from utils import TRAIN_RATIO, VAL_RATIO, TEST_RATIO, WASTE_CLASS_NAMES
 
 
 class WasteDatasetManager:
-    """Manages waste detection dataset preparation and organization"""
+    """管理废品检测数据集的准备和组织"""
     
     def __init__(self, dataset_root: str = "dataset"):
         self.dataset_root = Path(dataset_root)
         self.images_dir = self.dataset_root / "images" 
         self.labels_dir = self.dataset_root / "labels"
         
-        # Create directories if they don't exist
+        # 如果目录不存在则创建
         for split in ['train', 'val', 'test']:
             (self.images_dir / split).mkdir(parents=True, exist_ok=True)
             (self.labels_dir / split).mkdir(parents=True, exist_ok=True)
     
     def prepare_dataset_structure(self):
-        """Creates the standard dataset directory structure"""
-        print("Setting up dataset directory structure...")
+        """创建标准数据集目录结构"""
+        print("设置数据集目录结构...")
         
-        # Create README for each directory
+        # 为每个目录创建README文件
         readme_content = {
-            'train': "Training images and labels (80% of dataset)",
-            'val': "Validation images and labels (10% of dataset)", 
-            'test': "Test images and labels (10% of dataset)"
+            'train': "训练图像和标签（数据集的80%）",
+            'val': "验证图像和标签（数据集的10%）", 
+            'test': "测试图像和标签（数据集的10%）"
         }
         
         for split, description in readme_content.items():
             readme_path = self.images_dir / split / "README.md"
             with open(readme_path, 'w') as f:
-                f.write(f"# {split.capitalize()} Dataset\n\n{description}\n")
+                f.write(f"# {split.capitalize()} 数据集\n\n{description}\n")
                 
-        print("Dataset structure created successfully!")
+        print("数据集结构创建成功!")
         return True
     
     def split_dataset(self, source_images_dir: str, source_labels_dir: str):
