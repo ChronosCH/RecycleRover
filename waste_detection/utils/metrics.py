@@ -1,5 +1,5 @@
 """
-Performance metrics calculation for waste detection evaluation
+废品检测评估的性能指标计算
 """
 
 import numpy as np
@@ -11,7 +11,7 @@ import seaborn as sns
 
 
 class WasteDetectionMetrics:
-    """Calculate comprehensive metrics for waste detection performance"""
+    """计算废品检测性能的综合指标"""
     
     def __init__(self, class_names: List[str]):
         self.class_names = class_names
@@ -19,31 +19,31 @@ class WasteDetectionMetrics:
     
     def calculate_iou(self, box1: List[float], box2: List[float]) -> float:
         """
-        Calculate Intersection over Union (IoU) between two bounding boxes
+        计算两个边界框之间的交并比(IoU)
         
-        Args:
-            box1: [x1, y1, x2, y2] format
-            box2: [x1, y1, x2, y2] format
+        参数:
+            box1: [x1, y1, x2, y2] 格式
+            box2: [x1, y1, x2, y2] 格式
             
-        Returns:
-            IoU value between 0 and 1
+        返回:
+            IoU值，范围在0到1之间
         """
         x1_1, y1_1, x2_1, y2_1 = box1
         x1_2, y1_2, x2_2, y2_2 = box2
         
-        # Calculate intersection coordinates
+        # 计算交集坐标
         x1_i = max(x1_1, x1_2)
         y1_i = max(y1_1, y1_2)
         x2_i = min(x2_1, x2_2)
         y2_i = min(y2_1, y2_2)
         
-        # Calculate intersection area
+        # 计算交集面积
         if x2_i <= x1_i or y2_i <= y1_i:
             return 0.0
         
         intersection = (x2_i - x1_i) * (y2_i - y1_i)
         
-        # Calculate union area
+        # 计算并集面积
         area1 = (x2_1 - x1_1) * (y2_1 - y1_1)
         area2 = (x2_2 - x1_2) * (y2_2 - y1_2)
         union = area1 + area2 - intersection
@@ -52,27 +52,27 @@ class WasteDetectionMetrics:
     
     def calculate_ap(self, precisions: np.ndarray, recalls: np.ndarray) -> float:
         """
-        Calculate Average Precision (AP) using precision-recall curve
+        使用精确率-召回率曲线计算平均精度(AP)
         
-        Args:
-            precisions: Precision values
-            recalls: Recall values
+        参数:
+            precisions: 精确率值
+            recalls: 召回率值
             
-        Returns:
-            Average Precision value
+        返回:
+            平均精度值
         """
-        # Add sentinel values
+        # 添加哨兵值
         mrec = np.concatenate(([0.], recalls, [1.]))
         mpre = np.concatenate(([0.], precisions, [0.]))
         
-        # Compute the precision envelope
+        # 计算精确率包络
         for i in range(mpre.size - 1, 0, -1):
             mpre[i - 1] = np.maximum(mpre[i - 1], mpre[i])
         
-        # Find where recall changes
+        # 找到召回率变化的位置
         i = np.where(mrec[1:] != mrec[:-1])[0]
         
-        # Calculate AP
+        # 计算AP
         ap = np.sum((mrec[i + 1] - mrec[i]) * mpre[i + 1])
         return ap
     

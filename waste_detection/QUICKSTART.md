@@ -1,138 +1,138 @@
-# Quick Start Guide - Waste Detection Module
+# 快速开始指南 - 废品检测模块
 
-This guide provides quick setup instructions for the RecycleRover waste detection system.
+本指南为RecycleRover废品检测系统提供快速设置说明。
 
-## 🚀 Quick Setup
+## 🚀 快速设置
 
-### 1. Environment Setup
+### 1. 环境设置
 ```bash
 cd waste_detection
 
-# Create virtual environment (recommended)
+# 创建虚拟环境（推荐）
 python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # Windows系统: venv\Scripts\activate
 
-# Install dependencies
+# 安装依赖包
 pip install -r requirements.txt
 ```
 
-### 2. Prepare Dataset
+### 2. 准备数据集
 ```bash
-# Create dataset structure
+# 创建数据集结构
 python dataset/data_utils.py --prepare
 
-# Create YOLO configuration
+# 创建YOLO配置
 python dataset/data_utils.py --create-yaml
 
-# If you have existing data, split it:
+# 如果您有现有数据，请分割它：
 # python dataset/data_utils.py --split /path/to/images /path/to/labels
 ```
 
-### 3. Train Model
+### 3. 训练模型
 ```bash
-# Start training with default configuration
+# 使用默认配置开始训练
 python scripts/train.py
 
-# Or with custom config:
+# 或使用自定义配置：
 python scripts/train.py --config config/training_config.yaml --data config/waste_data.yaml
 ```
 
-### 4. Evaluate Model
+### 4. 评估模型
 ```bash
-# Evaluate trained model
+# 评估训练好的模型
 python scripts/evaluate.py --model runs/train/waste_detection/weights/best.pt
 
-# Generate comprehensive report
+# 生成综合报告
 python scripts/evaluate.py --model runs/train/waste_detection/weights/best.pt --report
 ```
 
-### 5. Export for Deployment
+### 5. 导出用于部署
 ```bash
-# Export to all formats
+# 导出到所有格式
 python scripts/export.py --model runs/train/waste_detection/weights/best.pt --format all
 
-# Export TensorRT for Jetson
+# 为Jetson导出TensorRT
 python scripts/export.py --model runs/train/waste_detection/weights/best.pt --format tensorrt --precision fp16
 ```
 
-### 6. Run Inference
+### 6. 运行推理
 ```bash
-# Test with webcam
+# 使用摄像头测试
 python scripts/inference.py --model exported_models/best.engine --source 0
 
-# Test with image
+# 使用图像测试
 python scripts/inference.py --model exported_models/best.engine --source test_image.jpg
 
-# Benchmark performance
+# 性能基准测试
 python scripts/inference.py --model exported_models/best.engine --source test_image.jpg --benchmark
 ```
 
-## 🎯 Key Features
+## 🎯 主要特性
 
-- **5-Class Detection**: plastic_bottle, paper_box, metal_can, glass_bottle, paper
-- **High Performance**: >95% mAP target, >30 FPS on Jetson TX2
-- **Multiple Export Formats**: PyTorch, ONNX, TensorRT
-- **Production Ready**: MQTT integration, deployment service
-- **Comprehensive Tools**: Training, evaluation, visualization, deployment
+- **5类检测**: plastic_bottle, paper_box, metal_can, glass_bottle, paper
+- **高性能**: >95% mAP目标，在Jetson TX2上>30 FPS
+- **多种导出格式**: PyTorch, ONNX, TensorRT
+- **生产就绪**: MQTT集成，部署服务
+- **完整工具**: 训练、评估、可视化、部署
 
-## 📊 Expected Results
+## 📊 预期结果
 
-After training with sufficient data (1000+ images per class), expect:
+使用充足数据训练后（每类1000+图像），预期：
 - **mAP@0.5**: >95%
-- **Inference Speed**: 30+ FPS on Jetson TX2
-- **Model Size**: <15MB (TensorRT)
-- **Memory Usage**: <2GB
+- **推理速度**: 在Jetson TX2上30+ FPS
+- **模型大小**: <15MB（TensorRT）
+- **内存使用**: <2GB
 
-## 🔧 Troubleshooting
+## 🔧 故障排除
 
-### Common Issues
+### 常见问题
 
-1. **CUDA Out of Memory**
-   - Reduce batch size in `config/training_config.yaml`
-   - Use smaller input size (320 instead of 640)
+1. **CUDA内存不足**
+   - 在`config/training_config.yaml`中减少批量大小
+   - 使用更小的输入尺寸（320而不是640）
 
-2. **Low Performance**
-   - Collect more diverse training data
-   - Improve annotation quality
-   - Adjust hyperparameters
+2. **性能低下**
+   - 收集更多样化的训练数据
+   - 提高标注质量
+   - 调整超参数
 
-3. **Deployment Issues**
-   - Check Jetson setup guide: `deployment/jetson_setup.md`
-   - Verify TensorRT installation
-   - Use deployment utilities: `python utils/deployment.py --check`
+3. **部署问题**
+   - 查看Jetson设置指南：`deployment/jetson_setup.md`
+   - 验证TensorRT安装
+   - 使用部署工具：`python utils/deployment.py --check`
 
-### Getting Help
+### 获取帮助
 
-1. Check configuration files in `config/`
-2. Review logs in `runs/train/` directory
-3. Use visualization tools for debugging
-4. Run tests: `python test_module.py`
+1. 检查`config/`中的配置文件
+2. 查看`runs/train/`目录中的日志
+3. 使用可视化工具进行调试
+4. 运行测试：`python test_module.py`
 
-## 🎓 Advanced Usage
+## 🎓 高级用法
 
-### Custom Training
+### 自定义训练
 ```bash
-# Modify hyperparameters in config/training_config.yaml
-# Adjust data augmentation settings
-# Change model architecture in config/model_config.yaml
+# 在config/training_config.yaml中修改超参数
+# 调整数据增强设置
+# 在config/model_config.yaml中更改模型架构
 ```
 
-### Production Deployment
+### 生产部署
 ```bash
-# Create deployment package
+# 创建部署包
 python utils/deployment.py --package . /path/to/output
 
-# Run production service
+# 运行生产服务
 python deployment/inference_service.py --config deployment/service_config.json
 ```
 
-### Model Optimization
+### 模型优化
 ```bash
-# Optimize for Jetson TX2
+# 为Jetson TX2优化
 python deployment/tensorrt_config.py
 
-# Benchmark different formats
+# 对不同格式进行基准测试
 python scripts/export.py --model best.pt --format all --benchmark
 ```
 
-This system provides a complete solution for waste detection from data preparation to production deployment! 🎉
+本系统提供从数据准备到生产部署的完整废品检测解决方案！🎉
